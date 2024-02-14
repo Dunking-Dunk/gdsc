@@ -1,5 +1,5 @@
 import React, {useRef, useEffect} from 'react'
-import { Text, View, StyleSheet, Button } from 'react-native'
+import { Text, View, StyleSheet, Button, ImageBackground } from 'react-native'
 import LottieView from 'lottie-react-native';
 
 import Color from '../../constants/Colors'
@@ -15,7 +15,8 @@ const LandingPage = props => {
         }, []);
 
     return (
-        <View style={styles.view}>
+    <View style={styles.view}>
+            <ImageBackground source={require('../../assets/images/landingBackground.png')} style={styles.bgImg}>
             <Text style={styles.title}>Vision</Text>
             <LottieView
         autoPlay
@@ -25,8 +26,7 @@ const LandingPage = props => {
           height: 300,
       
         }}
-        // Find more Lottie files at https://lottiefiles.com/featured
-        source={require('../../assets/eye2.json')}
+        source={require('../../assets/lottie/eye.json')}
       />
             <View style={styles.buttonView}>
                 <CustomButton onPress={() => { props.navigation.navigate('Register') }} color={Color.four} style={styles.button}>
@@ -35,7 +35,8 @@ const LandingPage = props => {
                 <CustomButton onPress={() => { props.navigation.navigate('Login') }} color={Color.four} style={styles.button}>
                     <Text style={{color: Color.one}}>Login</Text>
                 </CustomButton>
-            </View>
+                </View>
+                </ImageBackground>
         </View>
     )
         
@@ -66,6 +67,12 @@ const styles = StyleSheet.create({
         backgroundColor: Color.four,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    bgImg: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+        width: '100%'
     }
 })
 
