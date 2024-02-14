@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, Button, TextInput, KeyboardAvoidingView, Platform } from 'react-native'
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import Toast from 'react-native-root-toast';
 
 import Color from "../../constants/Colors";
 import CustomButton from "../../components/CustomButton";
@@ -22,6 +23,13 @@ const Login = () => {
     .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        Toast.show(errorMessage, {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.TOP,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,})
     });
     }
 

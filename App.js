@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {HeaderButtons, Item} from 'react-navigation-header-buttons'
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 import CustomHeaderButton from './components/headerButton';
 import Main from './pages/Main'
@@ -68,10 +69,12 @@ export default function App() {
 
 
   return (
-    <NavigationContainer>
+    <RootSiblingParent>
+          <NavigationContainer>
       {loggedIn ? <Navigation/>:  <Auth/>}
  
       </NavigationContainer>
+    </RootSiblingParent>
   );
 }
 

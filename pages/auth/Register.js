@@ -1,7 +1,8 @@
 import React, {useState} from "react";
-import { Text, View, StyleSheet, Button, TextInput, KeyboardAvoidingView, Platform } from 'react-native'
+import { Text, View, StyleSheet, Button, TextInput, KeyboardAvoidingView, Platform, ToastAndroid } from 'react-native'
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc,doc} from "firebase/firestore";
+import Toast from 'react-native-root-toast';
 
 import {db} from '../../firebaseConfig'
 import Color from "../../constants/Colors";
@@ -29,11 +30,16 @@ const Register = () => {
                 username,
                 email
               });
-        })
-        .catch((error) => {
+        }).catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-         console.log(errorMessage)
+          Toast.show(errorMessage, {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.TOP,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,})
         });
     }
 
