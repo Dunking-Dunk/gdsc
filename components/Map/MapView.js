@@ -21,10 +21,17 @@ export default function Map({children}) {
       latitude: 50,
       longitude: 42
     }) 
-    console.log(userCoords)
+
+    
     useEffect(() => {
       const location = new useLocation()
       location.getUserLocation(setUserCoords)
+      mapRef.current.animateToRegion({
+        latitude: userCoords.latitude,
+        longitude: userCoords.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      });
     }, [setUserCoords])
 
     const mapRef = useRef();

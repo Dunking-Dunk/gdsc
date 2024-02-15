@@ -1,4 +1,4 @@
-import  React, {useState, useEffect} from 'react';
+import  React, {useState, useEffect, useContext} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -24,7 +24,6 @@ function Auth() {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
     </Stack.Navigator>
-
   );
 }
 
@@ -53,6 +52,7 @@ function Navigation() {
 
 
 export default function App() {
+  const userContext = useContext(null)
   const [loading, setLoading] = useState({ loggedIn: false, loaded: false })
   const {loggedIn, loaded} = loading
 

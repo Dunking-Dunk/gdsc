@@ -64,13 +64,13 @@ const styles = StyleSheet.create({
         fontWeight: '600'
     },
     textInputContainer: {
-        width: '80%',
+        width: '90%',
         alignItems: 'center',
         padding: 20,
         height: '80%'
     },
     input: {
-        width: '90%',
+        width: '100%',
         height: 50,
         marginBottom: 20,
         borderBottomColor: Color.four,
