@@ -126,7 +126,7 @@ const People = () => {
       
        
             <View style={styles.TextInputContainer}>
-                <TextInput placeholder="Person Name" style={styles.TextInput} onChangeText={(text) => setName(text)} value={name} placeholderTextColor={Colors.four} autoCorrect autoFocus keyboardType="default" maxLength={1000} />
+                <TextInput placeholder="Person Name" style={styles.TextInput} onChangeText={(text) => setName(text)} value={name} placeholderTextColor={Colors.four} autoCorrect keyboardType="default" maxLength={1000} />
             </View>
                 <CustomButton style={styles.btn} onPress={handleSubmit}>
                     <Text style={{color: Colors.one}}>Add</Text>
@@ -201,13 +201,12 @@ const styles = StyleSheet.create({
     },
     peoplesContainer: {
         padding: 20,
+        width: '100%',
+        height: 500
     },
     mainPeoplesContainer: {
   
-        width: '100%',
-
-        flexDirection: 'column',
-
+        flex: 1
     }
 })
 

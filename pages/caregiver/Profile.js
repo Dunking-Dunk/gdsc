@@ -3,6 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import {View, Text, Image, StyleSheet }from 'react-native'
 import {db} from '../../firebaseConfig'
 import useUserStore from "../../store/userStore";
+import moment from "moment";
 
 import Loader from '../../components/Loader'
 import Colors from "../../constants/Colors";
@@ -22,7 +23,7 @@ const Profile = () => {
 
     if (profile) {
         return (
-            <View style={{flex: 1, paddingVertical: 15}}>
+            <View style={{flex: 1, paddingVertical: 15, paddingHorizontal: 10}}>
                 <View style={styles.profile}>
                     <Image source={{ uri: profile.image }} style={styles.profileImage} />
                     <View style={styles.profileDetail}>
@@ -31,7 +32,17 @@ const Profile = () => {
                             <Text style={styles.header}>Age:</Text>
                         <Text style={styles.text}>{profile.age}</Text>
                         </View>
-            
+                    </View>
+                </View>
+                <View style={styles.msgContainer}>
+                    <Text style={styles.msgTitle}>All Messages</Text>
+                    <View style={styles.msgCard}>
+                        <Text style={styles.cardMessage}>Today i need to complete this asap have some work to do</Text>
+                        <Text style={styles.cardTime}>{moment().fromNow()}</Text>
+                    </View>
+                    <View style={styles.msgCard}>
+                        <Text style={styles.cardMessage}>Today i need to complete this asap have some work to do</Text>
+                        <Text style={styles.cardTime}>{moment().fromNow()}</Text>
                     </View>
                 </View>
             </View>
@@ -44,16 +55,16 @@ export default Profile
 
 const styles = StyleSheet.create({
     profile: {
-        margin: 10,
-        padding: 10,
         backgroundColor: Colors.two,
         borderRadius: 20,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom: 15
     },
     profileImage: {
         width: 100,
         height: 100,
-        borderRadius: 100
+        borderRadius: 100,
+        margin: 10
     },
     profileDetail: {
         width: '100%',
@@ -78,5 +89,28 @@ const styles = StyleSheet.create({
     },
     header: {
         fontWeight: 'bold',
+    },
+    msgContainer: {
+        flexDirection: 'column',
+        gap: 10
+    },
+    msgTitle: {
+        fontSize: 24,
+        fontWeight: '600',
+    },
+    msgCard: {
+        padding: 10,
+        backgroundColor: Colors.two,
+        borderRadius: 12
+    },
+    cardMessage: {
+        fontSize: 20,
+        color: Colors.one,
+        marginBottom: 5
+    },
+    cardTime: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: Colors.three
     }
 })
