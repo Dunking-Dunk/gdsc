@@ -18,6 +18,11 @@ class GetUserLocation {
   }
 
   async getUserLocation(setLocation) {
+    const location = await Location.getCurrentPositionAsync({
+      accuracy: 2,
+    });
+    setLocation({ latitude: location.coords.latitude, longitude: location.coords.longitude })
+    
     setInterval(async () => {
       const location = await Location.getCurrentPositionAsync({
         accuracy: 2,

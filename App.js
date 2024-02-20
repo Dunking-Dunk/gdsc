@@ -1,4 +1,4 @@
-import  React, {useState, useEffect, useContext} from 'react';
+import  React, {useState, useEffect} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -6,7 +6,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {HeaderButtons, Item} from 'react-navigation-header-buttons'
 import { RootSiblingParent } from 'react-native-root-siblings';
+import { doc, getDoc } from "firebase/firestore";
+import registerNNPushToken, {registerIndieID, unregisterIndieDevice} from 'native-notify';
 
+import { db } from './firebaseConfig';
+import useUserStore from './store/userStore';
 import CustomHeaderButton from './components/headerButton';
 import Main from './pages/Main'
 import Login from './pages/auth/Login'
@@ -27,10 +31,7 @@ function Auth() {
   );
 }
 
-
-
 function Navigation() {
-
   const onLogout = () => {
     signOut(auth)
   }
@@ -52,19 +53,34 @@ function Navigation() {
 
 
 export default function App() {
-  const userContext = useContext(null)
+  registerNNPushToken(19745, 'iV4ceRtjBYygvWfLa5Bu3z');
+  registerIndieID('sub-id-1', 19745, 'iV4ceRtjBYygvWfLa5Bu3z');
+
   const [loading, setLoading] = useState({ loggedIn: false, loaded: false })
-  const {loggedIn, loaded} = loading
+  const { loggedIn, loaded } = loading
+  const setCurrentUser = useUserStore((state) => state.setCurrentUser)
+  
+  
+
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        async function helper() {
+          const currentUser = await getDoc(doc(db, "users", user.uid));
+          setCurrentUser(currentUser.data())
+        }
+        helper()
         setLoading({ loggedIn: true, loaded: true })
       } else {
         setLoading({ loggedIn: false, loaded: true })
       }
   
     })
+
+    return () => {
+      unregisterIndieDevice('sub-id-1', 19745, 'iV4ceRtjBYygvWfLa5Bu3z');
+    }
   }, [])
 
 

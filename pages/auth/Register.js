@@ -120,14 +120,12 @@ const Register = () => {
     return (
         <KeyboardAvoidingView style={styles.form} behavior={'padding'} keyboardVerticalOffset={500}>
         <View style={styles.textInputContainer}>
-        <Text style={styles.name}>Vision</Text>
                        <LottieView
         autoPlay
         ref={animation}
         style={{
-          width: 100,
-          height: 100,
-      
+          width: 200,
+          height: 150,
         }}
         source={require('../../assets/lottie/eye.json')}
       />
@@ -145,7 +143,7 @@ const Register = () => {
                 ) :
                     (
                         <View style={{ width: '100%', height: '100%' }}>
-                            <Text style={{textAlign: 'center', fontSize: 28, marginBottom: 5}}>Fill the detail about the blind person</Text>
+                            <Text style={{textAlign: 'center', fontSize: 18, marginBottom: 5}}>Fill the detail about the Vision User</Text>
                        <TextInput style={styles.input} placeholder="Name" onChangeText={(text) => inputHandler(text, 'disabledName')} value={register.disabledName} placeholderTextColor={Color.four} autoCorrect keyboardType="default"/>
                             <TextInput style={styles.input} placeholder="Age"  onChangeText={(text) => inputHandler(text, 'disabledAge')} value={register.disabledAge} placeholderTextColor={Color.four} autoCorrect keyboardType="number-pad" />
                             <View style={styles.col}>
