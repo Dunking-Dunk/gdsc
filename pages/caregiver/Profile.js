@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import {View, Text, Image, StyleSheet }from 'react-native'
+import React, { useCallback, useEffect, useState } from "react";
+import { collection, doc, getDoc, onSnapshot, orderBy, query } from "firebase/firestore";
+import {View, Text, Image, StyleSheet, FlatList }from 'react-native'
 import {db} from '../../firebaseConfig'
 import useUserStore from "../../store/userStore";
 import moment from "moment";
@@ -10,6 +10,7 @@ import Colors from "../../constants/Colors";
 
 const Profile = () => {
     const [profile, setProfile] = useState(null)
+    const [messages, setMessages] = useState([])
     const currentUser = useUserStore((state) => state.currentUser)
     
     useEffect(() => {   
@@ -17,9 +18,23 @@ const Profile = () => {
         const docRef = doc(db, "visionUser", currentUser.visionUser);
         const docSnap = await getDoc(docRef);
         setProfile(docSnap.data())
+        onSnapshot(query(collection(db, "visionUser", currentUser.visionUser, "messages"), orderBy('timestamp', 'desc')), ({docs}) => {
+          setMessages(docs)
+        })
         }
             helper()
     }, [])
+
+    const Card = useCallback(({ item }) => {
+        const data = item?.data()
+
+        return (
+            <View style={styles.msgCard} >
+                <Text style={styles.cardMessage}>{data.message}</Text>
+                        <Text style={styles.cardTime}>{moment(data.timestamp * 1000).fromNow()}</Text>
+                    </View>
+        )
+    }, [messages])
 
     if (profile) {
         return (
@@ -36,14 +51,11 @@ const Profile = () => {
                 </View>
                 <View style={styles.msgContainer}>
                     <Text style={styles.msgTitle}>All Messages</Text>
-                    <View style={styles.msgCard}>
-                        <Text style={styles.cardMessage}>Today i need to complete this asap have some work to do</Text>
-                        <Text style={styles.cardTime}>{moment().fromNow()}</Text>
-                    </View>
-                    <View style={styles.msgCard}>
-                        <Text style={styles.cardMessage}>Today i need to complete this asap have some work to do</Text>
-                        <Text style={styles.cardTime}>{moment().fromNow()}</Text>
-                    </View>
+                        <FlatList
+                            data={messages}
+                            keyExtractor={item => item.id}
+                            renderItem={Card}
+                        />
                 </View>
             </View>
         )  
@@ -91,6 +103,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     msgContainer: {
+        flex: 1,
         flexDirection: 'column',
         gap: 10
     },
@@ -101,7 +114,8 @@ const styles = StyleSheet.create({
     msgCard: {
         padding: 10,
         backgroundColor: Colors.two,
-        borderRadius: 12
+        borderRadius: 12,
+        marginBottom: 10
     },
     cardMessage: {
         fontSize: 20,

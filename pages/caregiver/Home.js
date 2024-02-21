@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
 import MapViewDirections from 'react-native-maps-directions';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
+LogBox.ignoreAllLogs()
 
 import { FontAwesome6, FontAwesome5 } from '@expo/vector-icons';
 import VisionMarker from '../../components/Map/VisionMarker'
@@ -14,6 +17,8 @@ import useMapContext from "../../components/Map/useMapContext";
 import { LATITUDE_DELTA, LONGITUDE_DELTA } from "../../components/Map/MapView";
 
 
+const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
 const GOOGLE_MAPS_APIKEY ='AIzaSyAaCWjzUJ1XziqSuWycOTNorOmfe2swDIc';
 
 const Home = () => {
@@ -21,6 +26,10 @@ const Home = () => {
     const userCoords = useUserStore((state) => state.userCoords)
     const { map, setMap } = useMapContext()
 
+    const [distanceTime, setDistanceTime] = useState({
+        distance: null,
+        duration: null
+    })
     const [navigate,setNavigate] = useState(false)
     const [visionUser, setVisionUser] = useState(null)
  
@@ -45,6 +54,8 @@ const Home = () => {
         setNavigate((state) => !state)
     }
 
+    print(distanceTime)
+
     if (visionUser) {
         return (
             <View style={{flex: 1}}>
@@ -54,7 +65,23 @@ const Home = () => {
                     <MapViewDirections
                     origin={userCoords}
                     destination={visionUser.coords}
-                    apikey={GOOGLE_MAPS_APIKEY}
+                            apikey={GOOGLE_MAPS_APIKEY}
+                            onReady={result => {
+                                setDistanceTime({
+                                    distance: result.distance,
+                                    duration: result.duration
+                                })
+                                if (map)
+                                map.fitToCoordinates(result.coordinates, {
+                                    edgePadding: {
+                                      right: (width / 20),
+                                      bottom: (height / 20),
+                                      left: (width / 20),
+                                      top: (height / 20),
+                                    }
+                                  });
+                        
+                              }}
                     strokeWidth={3}
                                         strokeColor={Colors.three}
                                         
@@ -62,6 +89,12 @@ const Home = () => {
                     )}
 
                 </MapView>
+                {navigate && (
+                    <View style={styles.dataContainer}>
+                        <Text style={styles.dataText}>{distanceTime.distance} Km</Text>
+                        <Text style={styles.dataText}>{distanceTime.duration} Min</Text>
+                        </View>
+                )}
                 <TouchableOpacity style={styles.visionCenter} onPress={visionCenter} >
                     <FontAwesome6 name="person" size={32} color={Colors.two}/>
                 </TouchableOpacity>
@@ -90,5 +123,20 @@ const styles = StyleSheet.create({
         bottom: 15,
         right: 130,
         zIndex: 2,
+    },
+    dataContainer: {
+        position: 'absolute',
+        top: 30,
+        left: '50%',
+        backgroundColor: Colors.two,
+        padding: 10,
+        borderRadius: 10,
+        flexDirection: 'row',
+        gap: 15,
+        transform: [{translateX: -90}]
+    },
+    dataText: {
+        color: Colors.one,
+        fontSize: 18,
     }
 })
